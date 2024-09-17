@@ -742,6 +742,17 @@ progress {
 .col {
   flex: 1 0 0%; }
 
+
+.flex {
+  display : flex !important;
+}
+
+.listItems li{
+  margin-top: 20px;
+  width: 100%!important;
+
+}
+
 .row-cols-auto > * {
   flex: 0 0 auto;
   width: auto; }
@@ -15946,11 +15957,26 @@ button:focus {
   background: -webkit-linear-gradient(45deg, #1EA1F3 0%, #67bff7 100%);
   background: linear-gradient(45deg, #1EA1F3 0%, #67bff7 100%); }
 
+
+.btn-youtube i {
+  color : red !important;
+  size : 20px;
+}
+
+.btn-youtube a {
+font-style: normal;
+}
+
+
 .btn-youtube {
-  background-color: #8862B9; }
-  .btn-youtube:hover, .btn-youtube:focus, .btn-youtube:active {
-    background-color: #4a306c;
-    color: #fff; }
+  padding : 0;
+  /*background-color: red;*/
+  color : black;
+  font-size: 20px;
+}
+  /*.btn-youtube:hover, .btn-youtube:focus, .btn-youtube:active {*/
+  /*  background-color: #4a306c;*/
+  /*  color: #fff; }*/
   .btn-youtube.btn-shadow {
     box-shadow: 0 5px 10px 2px rgba(136, 98, 185, 0.23); }
   .btn-youtube.light {
@@ -18225,7 +18251,7 @@ button:focus {
         padding: 15px 20px; }
     .pricingtable-wrapper.style-2 .pricingtable-price {
       padding: 30px;
-      padding-top: 50px;
+      /*padding-top: 50px;*/
       background: var(--secondary);
       transition: 0.5s;
       display: flex;
@@ -18233,7 +18259,8 @@ button:focus {
       justify-content: space-between; }
       .pricingtable-wrapper.style-2 .pricingtable-price .pricingtable-bx {
         font-weight: 400;
-        font-size: 60px;
+        font-size: 40px;
+        /*font-size: 60px;*/
         margin: 0;
         color: var(--primary); }
         .pricingtable-wrapper.style-2 .pricingtable-price .pricingtable-bx small, .pricingtable-wrapper.style-2 .pricingtable-price .pricingtable-bx .small {
@@ -18272,7 +18299,7 @@ button:focus {
       .pricingtable-wrapper.style-2 .pricingtable-features li {
         padding: 5px 0 5px 30px;
         position: relative;
-        font-weight: 500;
+        font-weight: 600;
         color: #000;
         margin: 10px 0; }
         .pricingtable-wrapper.style-2 .pricingtable-features li:after {
@@ -18316,7 +18343,8 @@ button:focus {
       font-size: 40px;
       color: #FFF;
       font-weight: 500;
-      margin-top: 15px; }
+      /*margin-top: 15px;*/
+    }
     .pricingtable-wrapper.style-2 .pricingtable-footer {
       padding: 30px;
       padding-top: 0; }
@@ -18510,7 +18538,9 @@ button:focus {
       display: flex;
       align-items: center;
       background: var(--secondary);
-      justify-content: space-between; }
+      /*justify-content: space-between; */
+      justify-content: center;
+    }
       .pricingtable-wrapper.style-4 .pricingtable-price .pricingtable-title {
         font-size: 40px;
         font-weight: 500;
@@ -22836,10 +22866,12 @@ ul a.rsswidget {
         font-weight: 700;
         line-height: 1; }
       .main-bnr-one .banner-content .title .text2 {
-        font-size: 200px;
+        /*font-size: 200px;*/
+        font-size: 130px;
         margin-right: 7px;
         font-weight: 900;
         display: inline-block; }
+
     .main-bnr-one .banner-content .sub-title {
       font-style: italic;
       font-size: 35px;
@@ -22983,9 +23015,16 @@ ul a.rsswidget {
         margin-bottom: 4px;
         font-weight: 500; }
         .main-bnr-one .banner-media ul li:nth-child(1) {
-          font-size: 33px;
-          color: #fff;
-          line-height: 1.1; }
+          /*font-size: 33px;*/
+          /*color: #fff;*/
+          /*line-height: 1.1;*/
+          background-color: #fff;
+          line-height: 1.4;
+          padding: 0 15px;
+          color: #000;
+          font-size: 28px;
+          font-weight: 500;
+        }
         .main-bnr-one .banner-media ul li:nth-child(2) {
           padding: 0 15px;
           font-size: 28px;
@@ -23000,7 +23039,8 @@ ul a.rsswidget {
           padding: 0 15px;
           color: #000;
           font-size: 28px;
-          font-weight: 500; }
+          font-weight: 500;
+        }
         @media only screen and (max-width: 1191px) {
           .main-bnr-one .banner-media ul li:nth-child(1), .main-bnr-one .banner-media ul li:nth-child(2), .main-bnr-one .banner-media ul li:nth-child(3) {
             font-size: 20px; } }
@@ -25154,6 +25194,11 @@ ul a.rsswidget {
     transform: translate(-50%, -50%);
     z-index: -1;
     background: var(--primary); }
+
+    .mb-30 {
+      margin-bottom:  30px;
+    }
+
   .icon-bx-wraper.style-1 .dz-title,
   .icon-bx-wraper.style-1 .dz-title a {
     color: #fff;
@@ -25164,7 +25209,7 @@ ul a.rsswidget {
       .icon-bx-wraper.style-1 .dz-title a {
         font-size: 24px; } }
   .icon-bx-wraper.style-1 p {
-    font-size: 15px;
+    font-size: 17px;
     color: #E0E0E0;
     -webkit-transition: all 0.5s;
     -ms-transition: all 0.5s;
