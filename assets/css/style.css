@@ -18348,13 +18348,13 @@ font-style: normal;
     .pricingtable-wrapper.style-2 .pricingtable-footer {
       padding: 30px;
       padding-top: 0; }
-    .pricingtable-wrapper.style-2:hover .pricingtable-price {
-      background: var(--primary); }
-      .pricingtable-wrapper.style-2:hover .pricingtable-price i {
-        color: var(--title); }
-    .pricingtable-wrapper.style-2:hover .pricingtable-title,
-    .pricingtable-wrapper.style-2:hover .pricingtable-bx {
-      color: var(--title); }
+    /*.pricingtable-wrapper.style-2:hover .pricingtable-price {*/
+    /*  background: var(--primary); }*/
+    /*  .pricingtable-wrapper.style-2:hover .pricingtable-price i {*/
+    /*    color: var(--title); }*/
+    /*.pricingtable-wrapper.style-2:hover .pricingtable-title,*/
+    /*.pricingtable-wrapper.style-2:hover .pricingtable-bx {*/
+    /*  color: var(--title); }*/
     .pricingtable-wrapper.style-2:hover .pricingtable-sub {
       background: var(--secondary);
       color: #fff; }
