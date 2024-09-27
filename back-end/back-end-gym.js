@@ -1,15 +1,103 @@
 const express = require('express');
+const dotenv = require('dotenv');
 const { Resend } = require('resend'); // Импортируем Resend
-const cors = require('cors');
 const app = express();
 const fs = require('fs');
 const path = require('path');
-const port = 4000;
+const axios = require("axios");
+const cors = require('cors');
+const port = 4000 || process.env.PORT
 
 
-
-app.use(cors());
+dotenv.config();
 app.use(express.json());
+app.use(cors());
+
+// Эндпоинт для создание оплаты yoo-kassa
+app.post('/create-payment-yookassa', async (req, res) => {
+    // Предположим, request_id был сохранен на сервере при создании платежа
+    const {
+        fullName,
+        surname,
+        email,
+        training,
+        price,
+        trainingRussianTitle
+    } = req.body;
+    console.log('fullName' , fullName)
+    const API_KEY = process.env.YOO_KASSA_API_KEY
+    const SHOP_ID = process.env.YOO_KASSA_SHOP_ID
+
+    try {
+        const response = await axios.post(
+            'https://api.yookassa.ru/v3/payments',
+            {
+                amount: {
+                    value: price,
+                    currency: "RUB"
+                },
+                capture: true,
+                description: trainingRussianTitle,
+                metadata: {
+                    fullName,
+                    surname,
+                    email,
+                    training,
+                    price
+                },
+                confirmation: {
+                    type: "redirect",
+                    return_url: "http://127.0.0.1:8080/xhtml/"
+                }
+            },
+            {
+                auth: {
+                    username: SHOP_ID, // Ваш идентификатор магазина
+                    password: API_KEY // Ваш секретный ключ
+                },
+                headers: {
+                    'Idempotence-Key': Math.random().toString(36).substring(7), // Уникальный ключ для идемпотентности
+                    'Content-Type': 'application/json' // Устанавливаем тип контента
+                }
+            }
+        );
+        console.log('response.data >' ,response.data.status )
+
+
+        const paymentUrl = response.data.confirmation.confirmation_url
+        if(paymentUrl){
+            return res.json({
+                paymentUrl,
+                status : response.data.status
+            });
+        }
+
+    } catch (error) {
+        console.error('Ошибка при процессинге платежа:', error.response?.data || error.message);
+        res.status(500).send('Ошибка завершения платежа.');
+    }
+});
+
+app.post('/yookassa/webhook', async (req, res) => {
+    const notification = req.body;
+    console.log('Webhook notification:', JSON.stringify(notification, null, 2));
+    const fullName = notification.object.metadata.fullName
+    const surname = notification.object.metadata.surname
+    const email = notification.object.metadata.email
+    const training = notification.object.metadata.training
+    const price = notification.object.metadata.price
+
+    if (notification.event === 'payment.succeeded') {
+        const payment = notification.object;
+        console.log(`Платеж ${payment.id} завершен успешно!`);
+        // отправить email
+        await sendEmailHandler(fullName, surname, email, training, price)
+    }
+
+    res.status(200).send('Webhook received');
+});
+
+
 
 const packages = {
     "beginner-mass-gain" : {
@@ -120,8 +208,7 @@ const packages = {
 }
 
 // Инициализация Resend с API ключом
-const RESEND_API_KEY = "re_g1kgYZJk_EUVNJBwLHC2awYE7FJPYPxw2";
-const resend = new Resend(RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Чтение HTML шаблона
 const emailTemplatePath = path.join(__dirname, 'html-email-template', 'email-template.html');
@@ -129,18 +216,18 @@ const emailTemplate = fs.readFileSync(emailTemplatePath, 'utf8');
 
 
 // Маршрут для отправки письма
-app.post('/send-email', async (req, res) => {
-    const { recipientEmail, subject, message ,title , price } = req.body;
+const sendEmailHandler = async (fullName, surname, email, training, price) => {
+    console.log('sendEmailHandler')
+    const selectedPrice = packages[training]?.[price]
+    const pdf = packages[training]?.[price]?.pdf
+    const pdfName = packages[training]?.[price]?.pdfName
 
-    const selectedPrice = packages[title]?.[price]
-    const pdf = packages[title]?.[price]?.pdf
-    const pdfName = packages[title]?.[price]?.pdfName
-        try {
+    try {
         // Асинхронно отправляем письмо через Resend
         const { data, error } = await resend.emails.send({
             from: 'Acme <onboarding@resend.dev>',
-            to: [recipientEmail],
-            subject:  subject,
+            to: [email],
+            subject:  training,
             html: emailTemplate,
             attachments: [
                 {
@@ -150,19 +237,18 @@ app.post('/send-email', async (req, res) => {
             ],
 
         });
-
         if (error) {
             console.error('Ошибка отправки:', error);
-            return res.status(500).send('Ошибка отправки письма');
+            return { success: false, message: 'Ошибка отправки письма' };
         }
 
         console.log('Ответ от Resend:', data);
-        res.send('Письмо успешно отправлено!');
+        return { success: true, message: 'Письмо успешно отправлено!' };
     } catch (err) {
         console.error('Ошибка:', err);
-        res.status(500).send('Произошла ошибка');
+        return { success: false, message: 'Произошла ошибка' };
     }
-});
+}
 
 // Запуск сервера
 app.listen(port, () => {
